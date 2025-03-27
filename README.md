@@ -5,8 +5,9 @@ This repository contains a protocol-level CLI designed to interact with a Model 
 - Protocol-level communication with the Model Context Provider.
 - Dynamic tool and resource exploration.
 - Support for multiple providers and models:
-  - Providers: OpenAI, Ollama.
+  - Providers: OpenAI, Ollama, ZhipuAI.
   - Default models: `gpt-4o-mini` for OpenAI, `qwen2.5-coder` for Ollama.
+  - Provider and model can be specified using environment variable LLM_PROVIDER and LLM_MODEL.
 - Enhanced modular chat system with server-aware tools.
 - Rich command system with context-aware completions.
 - **Conversation History**:
@@ -200,6 +201,41 @@ src/
 │   └── ...
 ├── llm/                      # LLM client and tools
 └── ...
+```
+
+## ZhipuAI support
+To use ZhipuAI, please set environment variables or add to .env.
+```
+OPENAI_API_KEY={Your key}
+LLM_PROVIDER=zhipuai
+LLM_MODEL=glm-4-flash
+```
+Run the following command to test:
+```bash
+python src/cli/main.py interactive --server sqlite --provider zhipuai
+```
+
+## Debugging
+If your IDE is VS Code, you can add the below script to launch.json.
+```json
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "MCP-CLI",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": ["interactive", 
+                "--server", "sqlite",
+                "--provider", "zhipuai"]
+          }
+    ]
+}
 ```
 
 ## Contributing

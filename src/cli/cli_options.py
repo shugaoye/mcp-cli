@@ -1,6 +1,7 @@
 # src/cli/cli_options.py
 import os
 import json
+from dotenv import load_dotenv
 
 def process_options(server, disable_filesystem, provider, model):
     """
@@ -22,9 +23,21 @@ def process_options(server, disable_filesystem, provider, model):
     #if not disable_filesystem and "filesystem" not in servers_list:
     #    servers_list.insert(0, "filesystem")
         
+    load_dotenv()
     # Use a default model if none is provided.
+    default_provider = os.environ.get("LLM_PROVIDER", "openai")
+    if default_provider:
+        provider = default_provider
+
     if not model:
-        model = "gpt-4o-mini" if provider.lower() == "openai" else "qwen2.5-coder"
+        model = os.environ.get("LLM_MODEL")
+        if not model:
+            if provider.lower() == "openai":
+                model = "gpt-4o-mini"
+            elif provider.lower() == "zhipuai":
+                model = "glm-4-flash"
+            elif provider.lower() == "ollama":
+                "qwen2.5-coder"
     
     # Set environment variables used by the MCP code.
     os.environ["LLM_PROVIDER"] = provider
